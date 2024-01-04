@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import prisma from "../db/prisma";
+import { signIn, signOut } from "../auth/auth";
 
 export const addPost = async (formData: FormData) => {
   const title = formData.get("title")?.toString();
@@ -32,4 +33,12 @@ export const deletePost = async (formData: FormData) => {
   });
 
   revalidatePath("/blog");
+};
+
+export const handleGithubLogin = async () => {
+  await signIn("github");
+};
+
+export const handleLogout = async () => {
+  await signOut();
 };

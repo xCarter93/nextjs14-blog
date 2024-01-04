@@ -5,6 +5,13 @@ import { usePathname } from "next/navigation";
 import NavLink from "./navLinks/navLinks";
 import { useState } from "react";
 import Image from "next/image";
+import { handleLogout } from "@/lib/actions/actions";
+import { auth } from "@/lib/auth/auth";
+import { Session } from "next-auth";
+
+interface LinksProps {
+  session: Session | null;
+}
 
 const links: { id: number; title: string; path: string }[] = [
   {
@@ -23,10 +30,9 @@ const links: { id: number; title: string; path: string }[] = [
     path: "/blog",
   },
 ];
-const Links = () => {
+const Links = ({ session }: LinksProps) => {
   const [open, setOpen] = useState(false);
   // TEMPORARY
-  const session: boolean = true;
   const isAdmin: boolean = true;
 
   return (
@@ -35,10 +41,14 @@ const Links = () => {
         {links.map((link) => {
           return <NavLink key={link.id} link={link} />;
         })}
-        {session ? (
+        {session?.user ? (
           <>
-            {isAdmin && <NavLink link={{ title: "Admin", path: "/admin" }} />}
-            <button className="btn btn-neutral">Logout</button>
+            {session.user && (
+              <NavLink link={{ title: "Admin", path: "/admin" }} />
+            )}
+            <form action={handleLogout}>
+              <button className="btn btn-neutral">Logout</button>
+            </form>
           </>
         ) : (
           <NavLink link={{ title: "Login", path: "/login" }} />
@@ -58,7 +68,9 @@ const Links = () => {
           {session ? (
             <>
               {isAdmin && <NavLink link={{ title: "Admin", path: "/admin" }} />}
-              <button className="btn btn-neutral">Logout</button>
+              <form action={handleLogout}>
+                <button className="btn btn-neutral">Logout</button>
+              </form>
             </>
           ) : (
             <NavLink link={{ title: "Login", path: "/login" }} />
