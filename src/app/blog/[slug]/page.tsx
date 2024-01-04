@@ -28,17 +28,17 @@ export default async function SinglePostPage({
   const post = await getPost(slug);
 
   return (
-    <div className="flex gap-14">
+    <div className="flex gap-10">
       <div className="flex-1">
         <Image
           src={post?.image || "/image-placehold.png"}
           alt="blog post image"
           width={700}
           height={700}
-          className="object-cover"
+          className="rounded-lg object-cover"
         />
       </div>
-      <div className="flex-[2]">
+      <div className="flex-1">
         <div className="flex flex-col gap-7">
           <h1 className="text-5xl font-bold capitalize text-white">
             {post?.title}

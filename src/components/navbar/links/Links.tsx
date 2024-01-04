@@ -30,7 +30,7 @@ const Links = () => {
   const isAdmin: boolean = true;
 
   return (
-    <div className="flex">
+    <div className="flex text-white">
       <div className="hidden gap-4 md:flex">
         {links.map((link) => {
           return <NavLink key={link.id} link={link} />;

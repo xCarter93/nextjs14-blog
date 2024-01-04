@@ -1,4 +1,10 @@
+import { Metadata } from "next";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "NextJS Blog App - About Page",
+  description: "Blog Application created using NextJS",
+};
 
 export default function AboutPage() {
   return (

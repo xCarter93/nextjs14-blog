@@ -23,12 +23,12 @@ const PostUser = async ({ userId, publishDate }: PostUserProps) => {
   // const user: BlogPostUserModel = await getData(userId);
   const user = await getUser(userId);
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-5">
       <Image
-        src="/noavatar.png"
+        src={user?.image ? user.image : "/noavatar.png"}
         alt="user image"
-        width={40}
-        height={40}
+        width={50}
+        height={50}
         className="rounded-full"
       />
       <div className="flex flex-col">
@@ -38,10 +38,11 @@ const PostUser = async ({ userId, publishDate }: PostUserProps) => {
       <div className="flex flex-col">
         <h3 className="font-bold">Published</h3>
         <span className="text-white">
-          {publishDate.toLocaleDateString("en-CA", {
+          {publishDate.toLocaleDateString("en-US", {
             year: "numeric",
-            month: "2-digit",
+            month: "short",
             day: "2-digit",
+            weekday: "short",
           })}
         </span>
       </div>
