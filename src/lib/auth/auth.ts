@@ -1,9 +1,37 @@
 import NextAuth from "next-auth";
-import Google from "@auth/core/providers/google";
-import Github from "@auth/core/providers/github";
+import Github from "next-auth/providers/github";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { env } from "../env";
 import prisma from "../db/prisma";
-import { User } from "@prisma/client";
+import bcrypt from "bcryptjs";
+import { authConfig } from "./auth.config";
+
+const login = async (username: string, password: string) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { username },
+    });
+
+    if (!user) {
+      throw new Error("Wrong credentials");
+    }
+
+    if (!password || !user.password) {
+      return null;
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordCorrect) {
+      throw new Error("Wrong credentials");
+    }
+
+    return user;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to login");
+  }
+};
 
 export const {
   handlers: { GET, POST },
@@ -11,22 +39,40 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  ...authConfig,
   providers: [
-    Google,
     Github({
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_SECRET_ID,
     }),
+    CredentialsProvider({
+      name: "Credentials",
+      async authorize(credentials) {
+        const { username, password } = credentials as {
+          username: string;
+          password: string;
+        };
+        try {
+          const user = await login(username, password);
+          console.log(user);
+
+          return user;
+        } catch (error) {
+          return null;
+        }
+      },
+    }),
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
-      if (!profile?.email) {
-        return false;
-      }
-      // console.log("user: ", user);
-      // console.log(`account: `, account);
-      // console.log("profile: ", profile);
+      console.log("user: ", user);
+      console.log(`account: `, account);
+      console.log("profile: ", profile);
+
       if (account?.provider === "github") {
+        if (!profile?.email) {
+          return false;
+        }
         try {
           const user = await prisma.user.findUnique({
             where: { email: profile?.email },
@@ -52,5 +98,6 @@ export const {
       }
       return true;
     },
+    ...authConfig.callbacks,
   },
 });
