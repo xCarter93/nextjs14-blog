@@ -1,6 +1,5 @@
 import PostUser from "@/components/post-user/PostUser";
 import { getPost } from "@/lib/db/post";
-import { BlogPostModel } from "@/models/BlogPostModel";
 import Image from "next/image";
 import { Suspense } from "react";
 
@@ -31,7 +30,7 @@ export default async function SinglePostPage({
     <div className="flex gap-10">
       <div className="flex-1">
         <Image
-          src={post?.image || "/image-placehold.png"}
+          src={post?.image || "/image-placeholder.png"}
           alt="blog post image"
           width={700}
           height={700}

@@ -1,14 +1,16 @@
+import { auth } from "@/lib/auth/auth";
 import AdminPostForm from "../adminPostForm/adminPostForm";
 import PostTable from "../postTable/postTable";
 
-const AdminPosts = () => {
+const AdminPosts = async () => {
+  const session = await auth();
   return (
     <div className="flex">
       <div className="mt-[52px] flex-1">
         <PostTable />
       </div>
       <div className="flex-1">
-        <AdminPostForm />
+        <AdminPostForm userId={session?.user?.id} />
       </div>
     </div>
   );

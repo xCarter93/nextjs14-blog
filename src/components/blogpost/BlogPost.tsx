@@ -16,8 +16,8 @@ const BlogPost = ({ post }: BlogPostProps) => {
             className="object-cover"
             src={post.image ? post.image : "/image-placeholder.png"}
             alt="blog image"
-            width={350}
-            height={400}
+            width={300}
+            height={300}
           />
         </div>
         <span className="m-auto w-fit rotate-[270deg] whitespace-nowrap text-xs">

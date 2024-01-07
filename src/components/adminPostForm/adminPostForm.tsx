@@ -3,12 +3,17 @@
 import { addPost } from "@/lib/actions/actions";
 import { useFormState } from "react-dom";
 
-const AdminPostForm = () => {
+interface AdminPostFormProps {
+  userId: string | undefined;
+}
+
+const AdminPostForm = ({ userId }: AdminPostFormProps) => {
   const [state, formAction] = useFormState(addPost, undefined);
   return (
     <div>
       <h1 className="mb-4 text-center text-3xl font-bold">Add New Post</h1>
       <form action={formAction}>
+        <input type="hidden" name="userId" value={userId} />
         <input
           type="text"
           required
