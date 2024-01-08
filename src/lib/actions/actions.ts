@@ -12,7 +12,7 @@ export const addPost = async (previousState: any, formData: FormData) => {
   const userId = formData.get("userId")?.toString();
 
   if (!title || !description || !slug) {
-    throw Error("Missing required fields");
+    return { error: "Missing required fields" };
   }
 
   await prisma.post.create({
