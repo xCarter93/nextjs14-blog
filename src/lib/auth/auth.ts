@@ -54,7 +54,6 @@ export const {
         };
         try {
           const user = await login(username, password);
-          console.log(user);
 
           return user;
         } catch (error) {
@@ -65,10 +64,6 @@ export const {
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
-      console.log("user: ", user);
-      console.log(`account: `, account);
-      console.log("profile: ", profile);
-
       if (account?.provider === "github") {
         if (!profile?.email) {
           return false;
