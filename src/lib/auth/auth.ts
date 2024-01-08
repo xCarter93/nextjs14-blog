@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-import Github from "next-auth/providers/github";
+import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { env } from "../env";
 import prisma from "../db/prisma";
@@ -41,7 +41,7 @@ export const {
 } = NextAuth({
   ...authConfig,
   providers: [
-    Github({
+    GithubProvider({
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_SECRET_ID,
     }),
